@@ -120,6 +120,10 @@ namespace Unity.BossRoom.Gameplay.Actions
         /// </summary>
         public virtual void End(ServerCharacter serverCharacter)
         {
+            if (serverCharacter.TryGetComponent(out IManaable manaable))
+            {
+                manaable.ReceiveMana(serverCharacter, -Config.ManaCost);
+            }         
             Cancel(serverCharacter);
         }
 

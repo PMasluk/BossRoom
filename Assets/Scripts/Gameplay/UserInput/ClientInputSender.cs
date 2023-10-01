@@ -459,8 +459,14 @@ namespace Unity.BossRoom.Gameplay.UserInput
         /// <param name="targetId"> NetworkObjectId of target. </param>
         public void RequestAction(ActionID actionID, SkillTriggerStyle triggerStyle, ulong targetId = 0)
         {
-            Assert.IsNotNull(GameDataSource.Instance.GetActionPrototypeByID(actionID),
+            Actions.Action action = GameDataSource.Instance.GetActionPrototypeByID(actionID);
+            Assert.IsNotNull(action,
                 $"Action with actionID {actionID} must be contained in the Action prototypes of GameDataSource!");
+
+            if (m_ServerCharacter.ManaPoints < action.Config.ManaCost)
+            {
+                return;
+            }
 
             if (m_ActionRequestCount < m_ActionRequests.Length)
             {
